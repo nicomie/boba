@@ -10,11 +10,14 @@
 
 ## USERS
 ### User
-- Name: String
-- ID: Integer
-- Favorites: Order[]
-- Last_order: Order
-
+```
+User {
+     Name: String
+     ID: Integer
+     Favorites: Order[]
+     Last_order: Order
+ }
+```
 ### Endpoints
 - GET: /users
 - GET: /users/id
