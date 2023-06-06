@@ -27,11 +27,14 @@ User {
 
 ## ORDERS
 ### Order
-- ID: User.id
-- Size: Enum
-- Flavors: Enum[]
-- Sweetness: Enum
-- Milk: Enum
+```
+Order {
+    ID: User.id
+    Size: Enum
+    Flavors: Enum[]
+    Sweetness: Enum
+    Milk: Enum
+```
 
 ### Endpoints
 - GET: /orders
