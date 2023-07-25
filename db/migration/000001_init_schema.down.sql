@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS accounts;
-DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS order_details;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS entries;
-DROP TABLE IF EXISTS transfers;
+DROP TABLE "transfers";
+DROP TABLE "entries";
+DROP TABLE "order_details";
+DROP TABLE "orders";
+DROP TABLE "items";
+DROP TABLE "accounts";
