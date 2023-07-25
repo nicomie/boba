@@ -5,8 +5,9 @@
 package db
 
 import (
-	"database/sql"
 	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Account struct {
@@ -17,10 +18,10 @@ type Account struct {
 }
 
 type Entry struct {
-	ID        int64         `json:"id"`
-	OrderID   sql.NullInt64 `json:"order_id"`
-	AccountID sql.NullInt64 `json:"account_id"`
-	CreatedAt time.Time     `json:"created_at"`
+	ID        int64       `json:"id"`
+	OrderID   pgtype.Int8 `json:"order_id"`
+	AccountID pgtype.Int8 `json:"account_id"`
+	CreatedAt time.Time   `json:"created_at"`
 }
 
 type Item struct {
@@ -34,16 +35,16 @@ type Order struct {
 }
 
 type OrderDetail struct {
-	OrderDetailID int64         `json:"order_detail_id"`
-	OrderID       sql.NullInt64 `json:"order_id"`
-	ItemID        sql.NullInt64 `json:"item_id"`
-	Quantity      int32         `json:"quantity"`
+	OrderDetailID int64       `json:"order_detail_id"`
+	OrderID       pgtype.Int8 `json:"order_id"`
+	ItemID        pgtype.Int8 `json:"item_id"`
+	Quantity      int32       `json:"quantity"`
 }
 
 type Transfer struct {
-	ID            int64         `json:"id"`
-	FromAccountID sql.NullInt64 `json:"from_account_id"`
-	ToAccountID   sql.NullInt64 `json:"to_account_id"`
+	ID            int64       `json:"id"`
+	FromAccountID pgtype.Int8 `json:"from_account_id"`
+	ToAccountID   pgtype.Int8 `json:"to_account_id"`
 	// it must be positive
 	Amount    int64     `json:"amount"`
 	CreatedAt time.Time `json:"created_at"`
