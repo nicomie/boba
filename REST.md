@@ -106,5 +106,8 @@ It is possible to use the standard library to handle the mapping between databas
 
 *See sqlc documentation [here](https://docs.sqlc.dev/en/stable/tutorials/getting-started-postgresql.html)*
 
+## Testing in Go
+
+By convention put the test in the same folder as the original file with suffix _test. 
 
 
