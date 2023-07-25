@@ -99,3 +99,12 @@ ALTER TABLE "transfers" ADD FOREIGN KEY ("to_account_id") REFERENCES "accounts" 
 ## Database migration
 
 Migrate up is used to make a forward change to the database while down reverts it. Might need to drop tables in correct order if it has foreign key contraints. 
+
+## Database ORM
+
+It is possible to use the standard library to handle the mapping between database and golang types. Also sqlx is a more convenient option that is still lightweight. Gorm is convenient but opinionated. Sqlc is code generation for sql queries. 
+
+*See sqlc documentation [here](https://docs.sqlc.dev/en/stable/tutorials/getting-started-postgresql.html)*
+
+
+
