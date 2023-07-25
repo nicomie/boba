@@ -96,4 +96,6 @@ ALTER TABLE "transfers" ADD FOREIGN KEY ("to_account_id") REFERENCES "accounts" 
 
 *The reason for the Entries table to to provide 'double-entry bookkeeping' and is often used in accounting systems to maintain accurate financial records.*
 
+## Database migration
 
+Migrate up is used to make a forward change to the database while down reverts it. Might need to drop tables in correct order if it has foreign key contraints. 
