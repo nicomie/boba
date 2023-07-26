@@ -8,13 +8,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomAccount(t *testing.T) Account {
-	arg := CreateAccountParams{
+func createRandomUser(t *testing.T) User {
+	arg := CreateUserParams{
 		Name:    util.RandomName(),
 		Balance: util.RandomMoney(),
 	}
 
-	account, err := testQueries.CreateAccount(context.Background(), arg)
+	account, err := testQueries.CreateUser(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
 
@@ -26,6 +26,6 @@ func createRandomAccount(t *testing.T) Account {
 
 	return account
 }
-func TestCreateAccount(t *testing.T) {
-	createRandomAccount(t)
+func TestCreateUser(t *testing.T) {
+	createRandomUser(t)
 }
