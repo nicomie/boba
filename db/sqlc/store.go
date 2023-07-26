@@ -84,6 +84,7 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		if err != nil {
 			return err
 		}
+		result.FromAccount, _ = q.GetAccount(ctx, result.FromAccount.ID)
 
 		result.ToEntry, err = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.FromAccountID,
@@ -92,6 +93,8 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		if err != nil {
 			return err
 		}
+
+		result.ToAccount, _ = q.GetAccount(ctx, result.ToAccount.ID)
 
 		return nil
 	})
