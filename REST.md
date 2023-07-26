@@ -110,4 +110,7 @@ It is possible to use the standard library to handle the mapping between databas
 
 By convention put the test in the same folder as the original file with suffix _test. 
 
+## Database transaction
+
+A set of operations that all succeed or none does. Works through system failure or through multiple concurrent accesses to the database. 
 
