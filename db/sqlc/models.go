@@ -18,34 +18,36 @@ type Account struct {
 }
 
 type Entry struct {
-	ID        int64       `json:"id"`
-	OrderID   pgtype.Int8 `json:"order_id"`
-	AccountID pgtype.Int8 `json:"account_id"`
-	CreatedAt time.Time   `json:"created_at"`
-}
-
-type Item struct {
-	ItemID   int64  `json:"item_id"`
-	ItemName string `json:"item_name"`
-	Amount   int64  `json:"amount"`
+	ID        int64 `json:"id"`
+	AccountID int64 `json:"account_id"`
+	// Can be negative or positive
+	Amount    int64     `json:"amount"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Order struct {
-	ID int64 `json:"id"`
+	ID        int64     `json:"id"`
+	UserID    int64     `json:"user_id"`
+	Status    string    `json:"status"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
-type OrderDetail struct {
-	OrderDetailID int64       `json:"order_detail_id"`
-	OrderID       pgtype.Int8 `json:"order_id"`
-	ItemID        pgtype.Int8 `json:"item_id"`
-	Quantity      int32       `json:"quantity"`
+type OrderItem struct {
+	OrderID   int64       `json:"order_id"`
+	ProductID int64       `json:"product_id"`
+	Quantity  pgtype.Int4 `json:"quantity"`
+}
+
+type Product struct {
+	ID    int64  `json:"id"`
+	Name  string `json:"name"`
+	Price int32  `json:"price"`
 }
 
 type Transfer struct {
-	ID            int64       `json:"id"`
-	FromAccountID pgtype.Int8 `json:"from_account_id"`
-	ToAccountID   pgtype.Int8 `json:"to_account_id"`
-	// it must be positive
-	Amount    int64     `json:"amount"`
-	CreatedAt time.Time `json:"created_at"`
+	ID            int64     `json:"id"`
+	FromAccountID int64     `json:"from_account_id"`
+	ToAccountID   int64     `json:"to_account_id"`
+	OrderID       int64     `json:"order_id"`
+	CreatedAt     time.Time `json:"created_at"`
 }
