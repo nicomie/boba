@@ -9,7 +9,7 @@ import (
 )
 
 func createRandomOrder(t *testing.T) Order {
-	user := createRandomAccount(t)
+	user := createRandomUser(t)
 
 	arg := CreateOrderParams{
 		UserID: user.ID,
@@ -23,7 +23,7 @@ func createRandomOrder(t *testing.T) Order {
 	require.Equal(t, order.UserID, user.ID)
 	require.Equal(t, order.Status, util.Pending)
 
-	require.NotZero(t, order.ID)
+	require.NotZero(t, order.OrderID)
 	require.NotZero(t, order.CreatedAt)
 
 	return order
