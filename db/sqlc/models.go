@@ -6,8 +6,6 @@ package db
 
 import (
 	"time"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Order struct {
@@ -18,10 +16,10 @@ type Order struct {
 }
 
 type OrderItem struct {
-	OrderItemID int64       `json:"order_item_id"`
-	OrderID     int64       `json:"order_id"`
-	ProductID   int64       `json:"product_id"`
-	Quantity    pgtype.Int4 `json:"quantity"`
+	OrderItemID int64 `json:"order_item_id"`
+	OrderID     int64 `json:"order_id"`
+	ProductID   int64 `json:"product_id"`
+	Quantity    int32 `json:"quantity"`
 }
 
 type Product struct {
