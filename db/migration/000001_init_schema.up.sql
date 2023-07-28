@@ -8,7 +8,7 @@ CREATE TABLE "users" (
 CREATE TABLE "products" (
   "product_id" bigserial PRIMARY KEY,
   "name" varchar UNIQUE NOT NULL,
-  "price" int NOT NULL
+  "price" int4 NOT NULL
 );
 
 CREATE TABLE "orders" (
@@ -22,7 +22,7 @@ CREATE TABLE "order_items" (
   "order_item_id" bigserial PRIMARY KEY,
   "order_id" bigint NOT NULL,
   "product_id" bigint NOT NULL,
-  "quantity" int DEFAULT 1
+  "quantity" int4 NOT NULL
 );
 
 CREATE INDEX ON "users" ("name");

@@ -16,3 +16,8 @@ ORDER BY order_id
 LIMIT $1
 OFFSET $2;
 
+-- name: UpdateOrder :exec
+UPDATE orders
+SET status = $1
+WHERE order_id = $2
+AND sqlc.arg(current_items)::int > 0;

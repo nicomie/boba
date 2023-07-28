@@ -7,26 +7,26 @@ package db
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createOrderItem = `-- name: CreateOrderItem :one
 INSERT INTO order_items (
-    product_id, 
+    order_id,
+    product_id,
     quantity
 ) VALUES (
-    $1, $2
+    $1, $2, $3
 ) RETURNING order_item_id, order_id, product_id, quantity
 `
 
 type CreateOrderItemParams struct {
-	ProductID int64       `json:"product_id"`
-	Quantity  pgtype.Int4 `json:"quantity"`
+	OrderID   int64 `json:"order_id"`
+	ProductID int64 `json:"product_id"`
+	Quantity  int32 `json:"quantity"`
 }
 
 func (q *Queries) CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error) {
-	row := q.db.QueryRow(ctx, createOrderItem, arg.ProductID, arg.Quantity)
+	row := q.db.QueryRow(ctx, createOrderItem, arg.OrderID, arg.ProductID, arg.Quantity)
 	var i OrderItem
 	err := row.Scan(
 		&i.OrderItemID,
@@ -39,11 +39,11 @@ func (q *Queries) CreateOrderItem(ctx context.Context, arg CreateOrderItemParams
 
 const getOrderItem = `-- name: GetOrderItem :one
 SELECT order_item_id, order_id, product_id, quantity FROM order_items 
-WHERE order_id = $1 LIMIT 1
+WHERE order_item_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetOrderItem(ctx context.Context, orderID int64) (OrderItem, error) {
-	row := q.db.QueryRow(ctx, getOrderItem, orderID)
+func (q *Queries) GetOrderItem(ctx context.Context, orderItemID int64) (OrderItem, error) {
+	row := q.db.QueryRow(ctx, getOrderItem, orderItemID)
 	var i OrderItem
 	err := row.Scan(
 		&i.OrderItemID,
@@ -52,6 +52,19 @@ func (q *Queries) GetOrderItem(ctx context.Context, orderID int64) (OrderItem, e
 		&i.Quantity,
 	)
 	return i, err
+}
+
+const getOrderItemCount = `-- name: GetOrderItemCount :one
+SELECT COUNT(*)::int AS COUNT
+FROM order_items
+WHERE order_id = $1
+`
+
+func (q *Queries) GetOrderItemCount(ctx context.Context, orderID int64) (int32, error) {
+	row := q.db.QueryRow(ctx, getOrderItemCount, orderID)
+	var count int32
+	err := row.Scan(&count)
+	return count, err
 }
 
 const listOrderItem = `-- name: ListOrderItem :many

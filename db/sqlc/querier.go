@@ -16,13 +16,15 @@ type Querier interface {
 	DeleteProduct(ctx context.Context, productID int64) error
 	DeleteUser(ctx context.Context, id int64) error
 	GetOrder(ctx context.Context, orderID int64) (Order, error)
-	GetOrderItem(ctx context.Context, orderID int64) (OrderItem, error)
+	GetOrderItem(ctx context.Context, orderItemID int64) (OrderItem, error)
+	GetOrderItemCount(ctx context.Context, orderID int64) (int32, error)
 	GetProduct(ctx context.Context, productID int64) (Product, error)
 	GetUser(ctx context.Context, id int64) (User, error)
 	ListOrderItem(ctx context.Context, arg ListOrderItemParams) ([]OrderItem, error)
 	ListOrders(ctx context.Context, arg ListOrdersParams) ([]Order, error)
 	ListProducts(ctx context.Context, arg ListProductsParams) ([]Product, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateOrder(ctx context.Context, arg UpdateOrderParams) error
 	UpdateProduct(ctx context.Context, arg UpdateProductParams) error
 	UpdateUser(ctx context.Context, arg UpdateUserParams) error
 }
