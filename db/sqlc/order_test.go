@@ -31,3 +31,48 @@ func createRandomOrder(t *testing.T) Order {
 func TestCreateOrder(t *testing.T) {
 	createRandomOrder(t)
 }
+
+func TestUpdateOrderEmptyOrder(t *testing.T) {
+	order := createRandomOrder(t)
+
+	var err error
+	var amount int32
+
+	createRandomOrderItemForOrder(t, order)
+
+	amount, err = testQueries.GetOrderItemCount(context.Background(), order.OrderID)
+
+	require.NoError(t, err)
+
+	err = testQueries.UpdateOrder(context.Background(), UpdateOrderParams{
+		OrderID:      order.OrderID,
+		Status:       util.Processing,
+		CurrentItems: amount,
+	})
+
+	require.NoError(t, err)
+
+	require.Equal(t, order.Status, util.Pending)
+}
+
+func TestUpdateOrderNonEmptyOrder(t *testing.T) {
+	order := createRandomOrder(t)
+
+	OrderItem := createRandomOrderItemForOrder(t, order)
+
+	require.NotEmpty(t, OrderItem)
+
+	var err error
+	var amount int32
+	amount, err = testQueries.GetOrderItemCount(context.Background(), order.OrderID)
+
+	require.NoError(t, err)
+
+	err = testQueries.UpdateOrder(context.Background(), UpdateOrderParams{
+		OrderID:      order.OrderID,
+		Status:       util.Processing,
+		CurrentItems: amount,
+	})
+
+	require.NoError(t, err)
+}
