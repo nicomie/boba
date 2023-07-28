@@ -25,76 +25,47 @@ Dbdigram uses database themarkup language (DBML) syntax.
 
 ## Relationships
 
-![Alt text](image.png)
+![Alt text](boba.png)
 
 ## PostgreSQL
 
 ```
-CREATE TABLE "accounts" (
+CREATE TABLE "users" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
   "balance" bigint NOT NULL,
-  "currency" varchar NOT NULL,
-  "created_at" timestampz NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "items" (
-  "item_id" bigserial PRIMARY KEY,
-  "item_name" varchar NOT NULL,
-  "amount" bigint NOT NULL
-);
-
-CREATE TABLE "order_details" (
-  "order_detail_id" bigserial PRIMARY KEY,
-  "order_id" bigserial,
-  "item_id" bigserial,
-  "quantity" int NOT NULL
+CREATE TABLE "products" (
+  "product_id" bigserial PRIMARY KEY,
+  "name" varchar UNIQUE NOT NULL,
+  "price" int4 NOT NULL
 );
 
 CREATE TABLE "orders" (
-  "id" bigserial PRIMARY KEY
+  "order_id" bigserial PRIMARY KEY,
+  "user_id" bigint NOT NULL,
+  "status" varchar NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "entries" (
-  "id" bigserial PRIMARY KEY,
-  "order_id" bigserial,
-  "account_id" bigign,
-  "created_at" timestampz NOT NULL DEFAULT (now())
+CREATE TABLE "order_items" (
+  "order_item_id" bigserial PRIMARY KEY,
+  "order_id" bigint NOT NULL,
+  "product_id" bigint NOT NULL,
+  "quantity" int4 NOT NULL
 );
 
-CREATE TABLE "transfers" (
-  "id" bigserial PRIMARY KEY,
-  "from_account_id" bigint,
-  "to_account_id" bigint,
-  "amount" bigint NOT NULL,
-  "created_at" timestampz NOT NULL DEFAULT (now())
-);
+CREATE INDEX ON "users" ("name");
 
-CREATE INDEX ON "accounts" ("name");
+ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-CREATE INDEX ON "entries" ("id");
+ALTER TABLE "order_items" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("order_id");
 
-CREATE INDEX ON "transfers" ("to_account_id");
-
-CREATE INDEX ON "transfers" ("from_account_id", "to_account_id");
-
-COMMENT ON COLUMN "transfers"."amount" IS 'it must be positive';
-
-ALTER TABLE "order_details" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
-
-ALTER TABLE "order_details" ADD FOREIGN KEY ("item_id") REFERENCES "items" ("item_id");
-
-ALTER TABLE "entries" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
-
-ALTER TABLE "entries" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
-
-ALTER TABLE "transfers" ADD FOREIGN KEY ("from_account_id") REFERENCES "accounts" ("id");
-
-ALTER TABLE "transfers" ADD FOREIGN KEY ("to_account_id") REFERENCES "accounts" ("id");
+ALTER TABLE "order_items" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("product_id");
 
 ```
-
-*The reason for the Entries table to to provide 'double-entry bookkeeping' and is often used in accounting systems to maintain accurate financial records.*
 
 ## Database migration
 
@@ -114,3 +85,14 @@ By convention put the test in the same folder as the original file with suffix _
 
 A set of operations that all succeed or none does. Works through system failure or through multiple concurrent accesses to the database. 
 
+## CI/CD with Github Actions
+See the Github Actions documentation [here](https://docs.github.com/en/actions)
+
+### Define a workflow
+A procedure made up of 1 or more jobs that are triggered through events, schedule or manually.
+
+### Runners
+A job is assigned to a runner through a server. A runner will report the progress, logs and result to Github.
+
+### Jobs
+A set of steps to execute on the same runner. Can be run in parallel or serially if required. A job contains different steps (individual tasks) and are run serially within a job. A step is further divided into one or more actions. Actions may be reused for workflows.
