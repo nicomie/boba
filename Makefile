@@ -4,6 +4,9 @@ DB_URL=postgresql://root:123@localhost:5432/boba_shop?sslmode=disable
 postgres:
 	docker run --name pg12 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123 -d postgres:12-alpine
 
+start:
+	docker start pg12
+
 createdb:
 	docker exec -it postgres createdb --username=root --owner=root simple_bank
 
@@ -32,5 +35,5 @@ server:
 	go run cmd/main/main.go
 
 
-.PHONY: postgres, createdb, dropdb, migrateup, migratedown, \
+.PHONY: postgres, start, createdb, dropdb, migrateup, migratedown, \
 migrateup1, migratedown1, sqlc, test, server
