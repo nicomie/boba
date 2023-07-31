@@ -16,10 +16,11 @@ ORDER BY id
 LIMIT $1
 OFFSET $2;
 
--- name: UpdateUser :exec
+-- name: UpdateUser :one
 UPDATE users
 SET balance = $2
-WHERE id = $1;
+WHERE id = $1
+RETURNING *;
 
 -- name: DeleteUser :exec
 DELETE FROM users 
