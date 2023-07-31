@@ -45,7 +45,7 @@ func (server *Server) getUser(ctx *gin.Context) {
 		return
 	}
 
-	acc, err := server.store.GetUser(ctx, req.ID)
+	user, err := server.store.GetUser(ctx, req.ID)
 	if err != nil {
 
 		if err == pgx.ErrNoRows {
@@ -57,5 +57,5 @@ func (server *Server) getUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, acc)
+	ctx.JSON(http.StatusOK, user)
 }
