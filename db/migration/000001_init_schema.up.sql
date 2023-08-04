@@ -14,7 +14,7 @@ CREATE TABLE "products" (
 CREATE TABLE "orders" (
   "order_id" bigserial PRIMARY KEY,
   "user_id" bigint NOT NULL,
-  "status" varchar NOT NULL,
+  "status" varchar DEFAULT 'pending',
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 

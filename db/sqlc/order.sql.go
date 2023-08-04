@@ -7,24 +7,20 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createOrder = `-- name: CreateOrder :one
 INSERT INTO orders (
-    user_id, 
-    status
+    user_id 
 ) VALUES (
-    $1, $2
+    $1
 ) RETURNING order_id, user_id, status, created_at
 `
 
-type CreateOrderParams struct {
-	UserID int64  `json:"user_id"`
-	Status string `json:"status"`
-}
-
-func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error) {
-	row := q.db.QueryRow(ctx, createOrder, arg.UserID, arg.Status)
+func (q *Queries) CreateOrder(ctx context.Context, userID int64) (Order, error) {
+	row := q.db.QueryRow(ctx, createOrder, userID)
 	var i Order
 	err := row.Scan(
 		&i.OrderID,
@@ -97,9 +93,9 @@ AND $3::int > 0
 `
 
 type UpdateOrderParams struct {
-	Status       string `json:"status"`
-	OrderID      int64  `json:"order_id"`
-	CurrentItems int32  `json:"current_items"`
+	Status       pgtype.Text `json:"status"`
+	OrderID      int64       `json:"order_id"`
+	CurrentItems int32       `json:"current_items"`
 }
 
 func (q *Queries) UpdateOrder(ctx context.Context, arg UpdateOrderParams) error {

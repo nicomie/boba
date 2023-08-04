@@ -11,10 +11,7 @@ import (
 func createRandomOrder(t *testing.T) Order {
 	user := createRandomUser(t)
 
-	arg := CreateOrderParams{
-		UserID: user.ID,
-		Status: util.Pending,
-	}
+	arg := user.ID
 
 	order, err := testQueries.CreateOrder(context.Background(), arg)
 	require.NoError(t, err)
@@ -46,13 +43,11 @@ func TestUpdateOrderEmptyOrder(t *testing.T) {
 
 	err = testQueries.UpdateOrder(context.Background(), UpdateOrderParams{
 		OrderID:      order.OrderID,
-		Status:       util.Processing,
 		CurrentItems: amount,
 	})
 
 	require.NoError(t, err)
 
-	require.Equal(t, order.Status, util.Pending)
 }
 
 func TestUpdateOrderNonEmptyOrder(t *testing.T) {
@@ -70,7 +65,6 @@ func TestUpdateOrderNonEmptyOrder(t *testing.T) {
 
 	err = testQueries.UpdateOrder(context.Background(), UpdateOrderParams{
 		OrderID:      order.OrderID,
-		Status:       util.Processing,
 		CurrentItems: amount,
 	})
 

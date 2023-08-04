@@ -6,13 +6,15 @@ package db
 
 import (
 	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Order struct {
-	OrderID   int64     `json:"order_id"`
-	UserID    int64     `json:"user_id"`
-	Status    string    `json:"status"`
-	CreatedAt time.Time `json:"created_at"`
+	OrderID   int64       `json:"order_id"`
+	UserID    int64       `json:"user_id"`
+	Status    pgtype.Text `json:"status"`
+	CreatedAt time.Time   `json:"created_at"`
 }
 
 type OrderItem struct {
