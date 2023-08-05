@@ -3,22 +3,26 @@ package main
 import (
 	"boba/api"
 	db "boba/db/sqlc"
+	"boba/util"
 	"context"
+	"fmt"
 	"log"
 
 	_ "github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-const (
-	dbDriver     = "postgres"
-	dbSource     = "postgresql://root:123@localhost:5432/boba_shop?sslmode=disable"
-	serverAdress = "0.0.0.0:8080"
-)
-
 func main() {
 
-	conn, err := pgxpool.New(context.Background(), dbSource)
+	config, err := util.LoadConfig("./")
+	if err != nil {
+		log.Fatal("cannot load conifg")
+	}
+
+	fmt.Println("HELLO")
+	fmt.Println(config.ServerAddress)
+
+	conn, err := pgxpool.New(context.Background(), config.DBSource)
 
 	if err != nil {
 		log.Fatal("Cannot cnnect to db: ", err)
@@ -27,7 +31,7 @@ func main() {
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAdress)
+	err = server.Start(config.ServerAddress)
 
 	if err != nil {
 		log.Fatal("cannot start server:", err)

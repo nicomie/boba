@@ -1,6 +1,7 @@
 package db
 
 import (
+	"boba/util"
 	"context"
 	"log"
 	"os"
@@ -9,17 +10,18 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:123@localhost:5432/boba_shop?sslmode=disable"
-)
-
 var testQueries *Queries
 var testDB *pgxpool.Pool
 
 func TestMain(m *testing.M) {
 	var err error
-	testDB, err = pgxpool.New(context.Background(), dbSource)
+
+	config, err := util.LoadConfig("../../")
+	if err != nil {
+		log.Fatal("cannot load conifg")
+	}
+
+	testDB, err = pgxpool.New(context.Background(), config.DBSource)
 
 	if err != nil {
 		log.Fatal("Cannot cnnect to db: ", err)
