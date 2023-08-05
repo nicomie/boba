@@ -1,8 +1,8 @@
 package util
 
 const (
-	Pending    = "Pending"
-	Processing = "Processing"
-	Ready      = "Ready"
-	Served     = "Served"
+	Pending    = "pending"
+	Processing = "processing"
+	Ready      = "ready"
+	Served     = "served"
 )

@@ -5,6 +5,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,7 +19,12 @@ func createRandomOrder(t *testing.T) Order {
 	require.NotEmpty(t, order)
 
 	require.Equal(t, order.UserID, user.ID)
-	require.Equal(t, order.Status, util.Pending)
+
+	status := pgtype.Text{
+		String: util.Pending,
+		Valid:  true,
+	}
+	require.Equal(t, order.Status, status)
 
 	require.NotZero(t, order.OrderID)
 	require.NotZero(t, order.CreatedAt)
