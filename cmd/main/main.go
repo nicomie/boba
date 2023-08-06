@@ -5,7 +5,6 @@ import (
 	db "boba/db/sqlc"
 	"boba/util"
 	"context"
-	"fmt"
 	"log"
 
 	_ "github.com/jackc/pgx/v5"
@@ -18,9 +17,6 @@ func main() {
 	if err != nil {
 		log.Fatal("cannot load conifg")
 	}
-
-	fmt.Println("HELLO")
-	fmt.Println(config.ServerAddress)
 
 	conn, err := pgxpool.New(context.Background(), config.DBSource)
 
