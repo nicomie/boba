@@ -23,6 +23,8 @@ func NewServer(store *db.Store) *Server {
 
 	router.POST("/orders", server.createOrder)
 
+	router.POST("/personnel", server.createPersonnel)
+
 	server.router = router
 	return server
 }
