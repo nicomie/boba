@@ -7,7 +7,7 @@ CREATE TABLE "personnel" (
   "badge_number" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
   "shop" bigint NOT NULL,
-  "hashed_pin" int4 NOT NULL,
+  "hashed_pin" varchar NOT NULL,
   "email" varchar DEFAULT 'editsbymystic@gmail.com',
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
