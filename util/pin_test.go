@@ -23,4 +23,8 @@ func TestPin(t *testing.T) {
 
 	require.EqualError(t, err, bcrypt.ErrMismatchedHashAndPassword.Error())
 
+	hashedPin2, err := HashPin(pin)
+	require.NoError(t, err)
+	require.NotEqual(t, hashedPin, hashedPin2)
+
 }
