@@ -6,15 +6,16 @@ name: ci-test
 on:
   push:
     branches: [ "main" ]
+    paths: ['db/**']
   pull_request:
     branches: [ "main" ]
+    paths: ['db/**']
 
 jobs:
 
   test:
     name: Test
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, '/db/') }}
 
     services:
       postgres:
