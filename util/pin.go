@@ -17,3 +17,7 @@ func HashPin(pin string) (string, error) {
 	return string(hashed), nil
 
 }
+
+func CheckPin(pin string, hashedPin string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPin), []byte(pin))
+}
