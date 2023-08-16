@@ -16,7 +16,7 @@ INSERT INTO orders (
     user_id 
 ) VALUES (
     $1
-) RETURNING order_id, user_id, status, created_at
+) RETURNING order_id, user_id, status, created_at, boba_shop
 `
 
 func (q *Queries) CreateOrder(ctx context.Context, userID int64) (Order, error) {
@@ -27,12 +27,13 @@ func (q *Queries) CreateOrder(ctx context.Context, userID int64) (Order, error) 
 		&i.UserID,
 		&i.Status,
 		&i.CreatedAt,
+		&i.BobaShop,
 	)
 	return i, err
 }
 
 const getOrder = `-- name: GetOrder :one
-SELECT order_id, user_id, status, created_at FROM orders 
+SELECT order_id, user_id, status, created_at, boba_shop FROM orders 
 WHERE order_id = $1 LIMIT 1
 `
 
@@ -44,12 +45,13 @@ func (q *Queries) GetOrder(ctx context.Context, orderID int64) (Order, error) {
 		&i.UserID,
 		&i.Status,
 		&i.CreatedAt,
+		&i.BobaShop,
 	)
 	return i, err
 }
 
 const listOrders = `-- name: ListOrders :many
-SELECT order_id, user_id, status, created_at FROM orders
+SELECT order_id, user_id, status, created_at, boba_shop FROM orders
 ORDER BY order_id
 LIMIT $1
 OFFSET $2
@@ -74,6 +76,7 @@ func (q *Queries) ListOrders(ctx context.Context, arg ListOrdersParams) ([]Order
 			&i.UserID,
 			&i.Status,
 			&i.CreatedAt,
+			&i.BobaShop,
 		); err != nil {
 			return nil, err
 		}

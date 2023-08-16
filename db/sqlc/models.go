@@ -10,11 +10,17 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type BobaShop struct {
+	ShopID int64  `json:"shop_id"`
+	Name   string `json:"name"`
+}
+
 type Order struct {
 	OrderID   int64       `json:"order_id"`
 	UserID    int64       `json:"user_id"`
 	Status    pgtype.Text `json:"status"`
 	CreatedAt time.Time   `json:"created_at"`
+	BobaShop  pgtype.Int8 `json:"boba_shop"`
 }
 
 type OrderItem struct {
@@ -22,6 +28,15 @@ type OrderItem struct {
 	OrderID     int64 `json:"order_id"`
 	ProductID   int64 `json:"product_id"`
 	Quantity    int32 `json:"quantity"`
+}
+
+type Personnel struct {
+	BadgeNumber int64       `json:"badge_number"`
+	Name        string      `json:"name"`
+	Shop        int64       `json:"shop"`
+	HashedPin   int32       `json:"hashed_pin"`
+	Email       pgtype.Text `json:"email"`
+	CreatedAt   time.Time   `json:"created_at"`
 }
 
 type Product struct {
