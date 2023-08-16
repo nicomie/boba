@@ -34,7 +34,7 @@ type Personnel struct {
 	BadgeNumber int64       `json:"badge_number"`
 	Name        string      `json:"name"`
 	Shop        int64       `json:"shop"`
-	HashedPin   int32       `json:"hashed_pin"`
+	HashedPin   string      `json:"hashed_pin"`
 	Email       pgtype.Text `json:"email"`
 	CreatedAt   time.Time   `json:"created_at"`
 }

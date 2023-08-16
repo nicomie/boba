@@ -9,8 +9,10 @@ import (
 )
 
 type Querier interface {
+	CreateBobaShop(ctx context.Context, name string) (BobaShop, error)
 	CreateOrder(ctx context.Context, userID int64) (Order, error)
 	CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error)
+	CreatePersonnel(ctx context.Context, arg CreatePersonnelParams) (Personnel, error)
 	CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteProduct(ctx context.Context, productID int64) error
