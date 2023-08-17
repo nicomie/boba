@@ -9,7 +9,8 @@ import (
 )
 
 type createUserRequest struct {
-	Name string `json:"name" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Name     string `json:"name" binding:"required"`
 }
 
 func (server *Server) createUser(ctx *gin.Context) {
@@ -20,8 +21,8 @@ func (server *Server) createUser(ctx *gin.Context) {
 	}
 
 	arg := db.CreateUserParams{
-		Name:    req.Name,
-		Balance: 0,
+		Username: req.Username,
+		Name:     req.Name,
 	}
 
 	acc, err := server.store.CreateUser(ctx, arg)

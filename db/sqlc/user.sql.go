@@ -7,27 +7,30 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
-    name, 
-    balance
+    username,
+    name 
 ) VALUES (
     $1, $2
-) RETURNING id, name, balance, created_at
+) RETURNING id, username, name, balance, created_at
 `
 
 type CreateUserParams struct {
-	Name    string `json:"name"`
-	Balance int64  `json:"balance"`
+	Username string `json:"username"`
+	Name     string `json:"name"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, createUser, arg.Name, arg.Balance)
+	row := q.db.QueryRow(ctx, createUser, arg.Username, arg.Name)
 	var i User
 	err := row.Scan(
 		&i.ID,
+		&i.Username,
 		&i.Name,
 		&i.Balance,
 		&i.CreatedAt,
@@ -46,7 +49,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, name, balance, created_at FROM users 
+SELECT id, username, name, balance, created_at FROM users 
 WHERE id = $1 LIMIT 1
 `
 
@@ -55,6 +58,7 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	var i User
 	err := row.Scan(
 		&i.ID,
+		&i.Username,
 		&i.Name,
 		&i.Balance,
 		&i.CreatedAt,
@@ -63,7 +67,7 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, name, balance, created_at FROM users
+SELECT id, username, name, balance, created_at FROM users
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -85,6 +89,7 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 		var i User
 		if err := rows.Scan(
 			&i.ID,
+			&i.Username,
 			&i.Name,
 			&i.Balance,
 			&i.CreatedAt,
@@ -103,12 +108,12 @@ const updateUser = `-- name: UpdateUser :one
 UPDATE users
 SET balance = $2
 WHERE id = $1
-RETURNING id, name, balance, created_at
+RETURNING id, username, name, balance, created_at
 `
 
 type UpdateUserParams struct {
-	ID      int64 `json:"id"`
-	Balance int64 `json:"balance"`
+	ID      int64       `json:"id"`
+	Balance pgtype.Int8 `json:"balance"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
@@ -116,6 +121,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 	var i User
 	err := row.Scan(
 		&i.ID,
+		&i.Username,
 		&i.Name,
 		&i.Balance,
 		&i.CreatedAt,
