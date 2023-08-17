@@ -1,7 +1,7 @@
 -- name: CreateUser :one
 INSERT INTO users (
-    name, 
-    balance
+    username,
+    name 
 ) VALUES (
     $1, $2
 ) RETURNING *;
