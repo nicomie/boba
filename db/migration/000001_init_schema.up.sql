@@ -1,6 +1,7 @@
 CREATE TABLE "users" (
   "id" bigserial PRIMARY KEY,
-  "username" varchar NOT NULL, 
+  "username" varchar NOT NULL,
+  "hashed_password" varchar NOT NULL,
   "name" varchar NOT NULL,
   "balance" bigint DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now())
