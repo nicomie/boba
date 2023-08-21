@@ -25,8 +25,8 @@ func createRandomUser(t *testing.T) User {
 	require.NotEmpty(t, account.HashedPassword)
 
 	require.Equal(t, arg.Name, account.Name)
-	require.Equal(t, pgtype.Int8{
-		Int64: 0,
+	require.Equal(t, pgtype.Int4{
+		Int32: 0,
 		Valid: true,
 	}, account.Balance)
 
