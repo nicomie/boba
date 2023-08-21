@@ -2,17 +2,31 @@ package api
 
 import (
 	db "boba/db/sqlc"
+	"boba/token"
+	"boba/util"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Server struct {
-	store  *db.Store
-	router *gin.Engine
+	config     util.Config
+	store      db.Store
+	router     *gin.Engine
+	tokenMaker token.Maker
 }
 
-func NewServer(store *db.Store) *Server {
-	server := &Server{store: store}
+func NewServer(config util.Config, store db.Store) (*Server, error) {
+	tokenMaker, err := token.NewJWTMaker(config.TokenSymmetricKey)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker: %w", err)
+	}
+
+	server := &Server{
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
+	}
 	router := gin.Default()
 
 	router.POST("/users", server.createUser)
@@ -26,7 +40,7 @@ func NewServer(store *db.Store) *Server {
 	router.POST("/personnel", server.createPersonnel)
 
 	server.router = router
-	return server
+	return server, nil
 }
 
 func (server *Server) Start(address string) error {
