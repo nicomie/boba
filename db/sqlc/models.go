@@ -50,6 +50,6 @@ type User struct {
 	Username       string      `json:"username"`
 	HashedPassword string      `json:"hashed_password"`
 	Name           string      `json:"name"`
-	Balance        pgtype.Int8 `json:"balance"`
+	Balance        pgtype.Int4 `json:"balance"`
 	CreatedAt      time.Time   `json:"created_at"`
 }

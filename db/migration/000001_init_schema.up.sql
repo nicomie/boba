@@ -3,14 +3,14 @@ CREATE TABLE "users" (
   "username" varchar NOT NULL,
   "hashed_password" varchar NOT NULL,
   "name" varchar NOT NULL,
-  "balance" bigint DEFAULT 0,
+  "balance" integer DEFAULT 0,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "products" (
   "product_id" bigserial PRIMARY KEY,
   "name" varchar UNIQUE NOT NULL,
-  "price" int4 NOT NULL
+  "price" integer NOT NULL
 );
 
 CREATE TABLE "orders" (
@@ -24,7 +24,7 @@ CREATE TABLE "order_items" (
   "order_item_id" bigserial PRIMARY KEY,
   "order_id" bigint NOT NULL,
   "product_id" bigint NOT NULL,
-  "quantity" int4 NOT NULL
+  "quantity" integer NOT NULL
 );
 
 CREATE INDEX ON "users" ("name");
