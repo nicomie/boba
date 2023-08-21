@@ -14,23 +14,26 @@ import (
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
     username,
+    hashed_password,
     name 
 ) VALUES (
-    $1, $2
-) RETURNING id, username, name, balance, created_at
+    $1, $2, $3
+) RETURNING id, username, hashed_password, name, balance, created_at
 `
 
 type CreateUserParams struct {
-	Username string `json:"username"`
-	Name     string `json:"name"`
+	Username       string `json:"username"`
+	HashedPassword string `json:"hashed_password"`
+	Name           string `json:"name"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRow(ctx, createUser, arg.Username, arg.Name)
+	row := q.db.QueryRow(ctx, createUser, arg.Username, arg.HashedPassword, arg.Name)
 	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
+		&i.HashedPassword,
 		&i.Name,
 		&i.Balance,
 		&i.CreatedAt,
@@ -49,7 +52,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, username, name, balance, created_at FROM users 
+SELECT id, username, hashed_password, name, balance, created_at FROM users 
 WHERE id = $1 LIMIT 1
 `
 
@@ -59,6 +62,7 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
+		&i.HashedPassword,
 		&i.Name,
 		&i.Balance,
 		&i.CreatedAt,
@@ -67,7 +71,7 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, username, name, balance, created_at FROM users
+SELECT id, username, hashed_password, name, balance, created_at FROM users
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -90,6 +94,7 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 		if err := rows.Scan(
 			&i.ID,
 			&i.Username,
+			&i.HashedPassword,
 			&i.Name,
 			&i.Balance,
 			&i.CreatedAt,
@@ -108,7 +113,7 @@ const updateUser = `-- name: UpdateUser :one
 UPDATE users
 SET balance = $2
 WHERE id = $1
-RETURNING id, username, name, balance, created_at
+RETURNING id, username, hashed_password, name, balance, created_at
 `
 
 type UpdateUserParams struct {
@@ -122,6 +127,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
+		&i.HashedPassword,
 		&i.Name,
 		&i.Balance,
 		&i.CreatedAt,

@@ -10,14 +10,19 @@ import (
 )
 
 func createRandomUser(t *testing.T) User {
+	hashedPass, err := util.HashPin(util.RandomString(8))
+
+	require.NoError(t, err)
 	arg := CreateUserParams{
-		Username: util.RandomString(8),
-		Name:     util.RandomName(),
+		Username:       util.RandomString(8),
+		HashedPassword: hashedPass,
+		Name:           util.RandomName(),
 	}
 
 	account, err := testQueries.CreateUser(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
+	require.NotEmpty(t, account.HashedPassword)
 
 	require.Equal(t, arg.Name, account.Name)
 	require.Equal(t, pgtype.Int8{

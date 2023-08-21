@@ -46,9 +46,10 @@ type Product struct {
 }
 
 type User struct {
-	ID        int64       `json:"id"`
-	Username  string      `json:"username"`
-	Name      string      `json:"name"`
-	Balance   pgtype.Int8 `json:"balance"`
-	CreatedAt time.Time   `json:"created_at"`
+	ID             int64       `json:"id"`
+	Username       string      `json:"username"`
+	HashedPassword string      `json:"hashed_password"`
+	Name           string      `json:"name"`
+	Balance        pgtype.Int8 `json:"balance"`
+	CreatedAt      time.Time   `json:"created_at"`
 }
