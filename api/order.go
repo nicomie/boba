@@ -2,14 +2,14 @@ package api
 
 import (
 	db "boba/db/sqlc"
+	"boba/token"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type createOrderRequest struct {
-	UserID int64        `json:"user_id" binding:"required,max=50"`
-	Orders []*OrderItem `json:"orders" binding:"dive"`
+	OrderItems []*OrderItem `json:"orders" binding:"dive"`
 }
 
 type OrderItem struct {
@@ -25,8 +25,9 @@ func (server *Server) createOrder(ctx *gin.Context) {
 		return
 	}
 
-	arg := req.UserID
+	authPayload := ctx.MustGet(authPayloadKey).(*token.Payload)
 
+	arg := authPayload.UserID
 	order, err := server.store.CreateOrder(ctx, arg)
 
 	if err != nil {
@@ -34,8 +35,8 @@ func (server *Server) createOrder(ctx *gin.Context) {
 		return
 	}
 
-	print(len(req.Orders))
-	for _, o := range req.Orders {
+	print(len(req.OrderItems))
+	for _, o := range req.OrderItems {
 
 		println(o.ProductID)
 		println(o.Quantity)
