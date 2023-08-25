@@ -13,13 +13,13 @@ func TestJWKMaker(t *testing.T) {
 	maker, err := NewJWTMaker(util.RandomString(32))
 	require.NoError(t, err)
 
-	username := util.RandomName()
+	id := util.RandomInt(2, 10)
 	duration := time.Minute
 
 	issuedAt := time.Now()
 	expiredAt := issuedAt.Add(duration)
 
-	token, err := maker.CreateToken(username, duration)
+	token, err := maker.CreateToken(id, duration)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 
@@ -28,7 +28,7 @@ func TestJWKMaker(t *testing.T) {
 	require.NotEmpty(t, payload)
 
 	require.NotZero(t, payload.ID)
-	require.Equal(t, username, payload.Username)
+	require.Equal(t, id, payload.UserID)
 	require.WithinDuration(t, issuedAt, payload.IssuedAt, time.Second)
 	require.WithinDuration(t, expiredAt, payload.ExpiredAt, time.Second)
 
@@ -38,9 +38,8 @@ func TestExpiredToken(t *testing.T) {
 	maker, err := NewJWTMaker(util.RandomString(32))
 	require.NoError(t, err)
 
-	username := util.RandomName()
-
-	token, err := maker.CreateToken(username, -time.Minute)
+	id := util.RandomInt(2, 10)
+	token, err := maker.CreateToken(id, -time.Minute)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
@@ -53,7 +52,7 @@ func TestExpiredToken(t *testing.T) {
 }
 
 func TestInvalidJWTTokenAlgNone(t *testing.T) {
-	payload, err := NewPayload(util.RandomName(), time.Minute)
+	payload, err := NewPayload(util.RandomInt(10, 20), time.Minute)
 	require.NoError(t, err)
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodNone, payload)

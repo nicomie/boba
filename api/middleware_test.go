@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func addAuth(t *testing.T, request *http.Request, tokenMaker token.Maker, authType string, username string, duration time.Duration) {
-	token, err := tokenMaker.CreateToken(username, duration)
+func addAuth(t *testing.T, request *http.Request, tokenMaker token.Maker, authType string, userID int64, duration time.Duration) {
+	token, err := tokenMaker.CreateToken(userID, duration)
 	require.NoError(t, err)
 
 	authHeader := fmt.Sprintf("%s %s", authType, token)
@@ -30,7 +30,7 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "OK",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuth(t, request, tokenMaker, authTypeBearer, "user", time.Minute)
+				addAuth(t, request, tokenMaker, authTypeBearer, 1, time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
@@ -48,7 +48,7 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "UnsupportedAuth",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuth(t, request, tokenMaker, "unsupported", "user", time.Minute)
+				addAuth(t, request, tokenMaker, "unsupported", 1, time.Minute)
 
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
@@ -58,7 +58,7 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "InvalidAuthFomat",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuth(t, request, tokenMaker, "", "user", time.Minute)
+				addAuth(t, request, tokenMaker, "", 1, time.Minute)
 
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
@@ -68,7 +68,7 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "InvalidAuthFomat",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuth(t, request, tokenMaker, authTypeBearer, "user", -time.Minute)
+				addAuth(t, request, tokenMaker, authTypeBearer, 1, -time.Minute)
 
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
