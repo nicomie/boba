@@ -12,7 +12,7 @@ import (
 
 type createUserRequest struct {
 	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required,number"`
+	Password string `json:"password" binding:"required,number,min=6"`
 	Name     string `json:"name" binding:"required"`
 }
 
@@ -41,13 +41,23 @@ func (server *Server) createUser(ctx *gin.Context) {
 		return
 	}
 
+	hashed, err := util.HashPin(req.Password)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
 	arg := db.CreateUserParams{
-		Username: req.Username,
-		Name:     req.Name,
+		Username:       req.Username,
+		HashedPassword: hashed,
+		Name:           req.Name,
 	}
 
 	user, err := server.store.CreateUser(ctx, arg)
 	if err != nil {
+
+		// TODO: Check for unique violation
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
@@ -58,7 +68,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 
 type loginUserRequest struct {
 	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Password string `json:"password" binding:"required,min=6"`
 }
 
 type loginUserResponse struct {
