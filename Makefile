@@ -1,3 +1,5 @@
+DB_URL=postgresql://root:123@localhost:5432/boba_shop?sslmode=disable
+
 postgres:
 	docker run --name pg12 --network boba-network -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=123 -d postgres:12-alpine
 
